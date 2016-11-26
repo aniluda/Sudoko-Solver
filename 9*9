@@ -1,0 +1,101 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define Max 9
+int main()
+{
+
+    /*  Enter the  9*9 Sudoko  with conditions  empty cell should be taken as 0. */
+    int Sudoko[Max][Max] = {
+                                   { 0 , 7 , 0 , 0 , 3 , 0 , 0 , 0 , 8},
+                                   { 0 , 0 , 2 , 0 , 0 , 0 , 0 , 1 , 4},
+                                   { 1 , 0 , 8 , 0 , 0 , 4 , 7 , 0 , 0},
+                                   { 0 , 8 , 0 , 0 , 0 , 5 , 0 , 0 , 0},
+                                   { 0 , 0 , 7 , 8 , 1 , 2 , 9 , 0 , 0},
+                                   { 0 , 0 , 0 , 4 , 0 , 0 , 0 , 8 , 0},
+                                   { 0 , 0 , 5 , 6 , 0 , 0 , 3 , 0 , 9},
+                                   { 7 , 2 , 0 , 0 , 0 , 0 , 6 , 0 , 0},
+                                   { 6 , 0 , 0 , 0 , 4 , 0 , 0 , 7 , 0},
+                           } ;
+
+    Solve_Sudoko(Sudoko, 0 , 0 );
+    return 0;
+}
+
+void Solve_Sudoko(int Sudoko[Max][Max] , int m, int n)
+{
+    if(m == Max)
+    {
+        print(Sudoko);
+        printf("\n");
+        return ;
+    }
+    if(n > Max-1)
+    {
+        Solve_Sudoko(Sudoko , m+1 , 0);
+    }
+    int k;
+    if(Sudoko[m][n] == 0 )
+    {
+           for(k = 1 ; k <= Max ; k++)
+           {
+                if(Sudoko[m][n] == 0)
+                {
+                    if(valid(Sudoko,m,n,k))
+                    {
+                         Sudoko[m][n] = k;
+                         Solve_Sudoko(Sudoko , m , n+1);
+                         Sudoko[m][n] = 0;
+                    }
+                }
+           }
+
+    }
+    else
+    {
+        Solve_Sudoko(Sudoko , m , n+1);
+    }
+}
+
+int print(int Sudoko[Max][Max])
+{
+    int i,j;
+    for(i = 0 ; i < Max ; i++)
+    {
+        for(j=0 ; j < Max ; j++)
+        {
+            printf("%d ", Sudoko[i][j]);
+        }
+        printf("\n");
+    }
+   exit(0);
+}
+
+int valid(int Sudoko[Max][Max],int m, int n , int k)
+{
+    int i, j ,val = m/3 , val1 = n/3;
+    for(i = 0 ; i < Max ; i++)
+    {
+        if(Sudoko[m][i] == k)
+        {
+            return 0;
+        }
+    }
+    for(i = 0 ; i < Max ; i++)
+    {
+        if(Sudoko[i][n] == k)
+        {
+            return 0;
+        }
+    }
+    for( i = 3*val ; i < 3*val + 3 ; i++)
+    {
+        for( j = 3*val1 ; j < 3*val1 + 3 ; j++)
+        {
+            if(Sudoko[i][j] == k)
+            {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
